@@ -11,7 +11,7 @@ Twiddler::Twiddler() {
 bool Twiddler::isStable() {
   double sum_kds = 0.0;
   for (auto kd : kds) sum_kds += kd;
-  cout << "tolerance " << tolerance << " sum kds " << sum_kds << endl;
+  //cout << "tolerance " << tolerance << " sum kds " << sum_kds << endl;
   return (tolerance > sum_kds);
 }
 Twiddler::~Twiddler() {}
@@ -74,7 +74,7 @@ std::ostream& operator <<(std::ostream& os, const Twiddler& twdlr){
   
   os << "kds[ ";
   for (auto a : twdlr.kds) os << a << " ";
-  os << "]";
+  os << "] tolerance " << twdlr.tolerance;
 
   return os;
 }
@@ -88,7 +88,6 @@ void Twiddler::reset() {
   N = 1;
   iterations = 0;
   best_err = numeric_limits<double>::max();
-  //best_err = 0.01;
   sq_sum_err = 0;
   step_cnt = 0;
   cur_state = 0;
