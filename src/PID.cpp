@@ -51,7 +51,7 @@ void PID::UpdateError(double cte, double speed) {
       Kp = ks[0];
       Kd = ks[1];
     }
-    else if (state == PD_CORERCTION) {
+    else if (state == PD_CORRECTION) {
       Kp = ks[0];
       Kd = ks[1];
     }
@@ -65,9 +65,9 @@ void PID::UpdateError(double cte, double speed) {
     twdlr.insert(Kd, 0.1);
     twdlr.set_steps_per_iteration(100);
     twdlr.tolerance = 0.001;
-    state = PD_CORERCTION;
+    state = PD_CORRECTION;
   }
-  else if (state == PD_CORERCTION){
+  else if (state == PD_CORRECTION){
     twdlr.reset();
     twdlr.insert(Ki, 0.001);
     twdlr.set_steps_per_iteration(100);
@@ -95,7 +95,7 @@ double PID::TotalError() {
 std::ostream& operator << (std::ostream& os, const PID::TWDLR_STATES& state) {
   switch(state) {
   case PID::TWDLR_STATES::STABILIZE: os << "STABILIZE"; break;
-  case PID::TWDLR_STATES::PD_CORERCTION: os << "PD_CORERCTION"; break;
+  case PID::TWDLR_STATES::PD_CORRECTION: os << "PD_CORRECTION"; break;
   case PID::TWDLR_STATES::I_CORRECTION: os << "I_CORRECTION"; break;
   case PID::TWDLR_STATES::TUNED: os << "TUNED"; break;
   }

@@ -7,7 +7,7 @@ class PID {
 public:
   typedef enum STATES {
     STABILIZE,
-    PD_CORERCTION,
+    PD_CORRECTION,
     I_CORRECTION,
     TUNED
   } TWDLR_STATES;
