@@ -80,7 +80,7 @@ void PID::UpdateError(double cte, double speed) {
     tune = false;
   }
 
-  cout << "Ks  [" << Kp << ", " << Ki <<", " << Kd << "], Tuning state " << state << endl;
+  cout << "Ks  [" << Kp << ", " << Ki <<", " << Kd << "], Tuning state : " << state << endl;
   cout << "Errors  [" << p_error << ", " << i_error <<", " << d_error << "]" << endl;
   d_error = cte - p_error;
   p_error = cte;
@@ -90,5 +90,15 @@ void PID::UpdateError(double cte, double speed) {
 
 double PID::TotalError() {
   return (-p_error*Kp - i_error*Ki -speed*d_error*Kd);
+}
+
+std::ostream& operator << (std::ostream& os, const PID::TWDLR_STATES& state) {
+  switch(state) {
+  case PID::TWDLR_STATES::STABILIZE: os << "STABILIZE"; break;
+  case PID::TWDLR_STATES::PD_CORERCTION: os << "PD_CORERCTION"; break;
+  case PID::TWDLR_STATES::I_CORRECTION: os << "I_CORRECTION"; break;
+  case PID::TWDLR_STATES::TUNED: os << "TUNED"; break;
+  }
+  return os;
 }
 

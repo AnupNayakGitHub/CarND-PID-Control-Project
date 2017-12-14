@@ -4,7 +4,14 @@
 #include "twiddler.h"
 
 class PID {
-//public:
+public:
+  typedef enum STATES {
+    STABILIZE,
+    PD_CORERCTION,
+    I_CORRECTION,
+    TUNED
+  } TWDLR_STATES;
+
 private:
   // Errors
   double p_error;
@@ -20,12 +27,6 @@ private:
 
   bool tune;
   Twiddler twdlr;
-  typedef enum STATES {
-    STABILIZE,
-    PD_CORERCTION,
-    I_CORRECTION,
-    TUNED
-  } TWDLR_STATES;
   TWDLR_STATES state;
 
   // Internal method to set the tuning parameters
@@ -61,5 +62,6 @@ public:
   //Find out if the the simulator need to be reset
   bool NeedsReset();
 };
+std::ostream& operator << (std::ostream& os, const PID::TWDLR_STATES& state);
 
 #endif /* PID_H */
