@@ -6,25 +6,27 @@
 class PID {
 //public:
 private:
-  /*
-  * Errors
-  */
+  // Errors
   double p_error;
   double i_error;
   double d_error;
 
   double speed;
 
-  /*
-  * Coefficients
-  */ 
+  // Coefficients
   double Kp;
   double Ki;
   double Kd;
 
   bool tune;
   Twiddler twdlr;
-  unsigned int twdlr_st;
+  typedef enum STATES {
+    STABILIZE,
+    PD_CORERCTION,
+    I_CORRECTION,
+    TUNED
+  } TWDLR_STATES;
+  TWDLR_STATES state;
 
   // Internal method to set the tuning parameters
   void Tune(double tol, unsigned int steps_per_adj);

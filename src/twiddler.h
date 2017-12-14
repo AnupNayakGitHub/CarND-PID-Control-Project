@@ -37,6 +37,9 @@ public:
   std::vector<double> get_gains() {
     return ks; 
   }
+  friend std::ostream& operator <<(std::ostream& os, const Twiddler& twdlr);
 };
+
+std::ostream& operator <<(std::ostream& os, const Twiddler& twdlr);
 
 #endif /* TWIDDLER_H */

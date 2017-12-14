@@ -47,9 +47,9 @@ int main(int argc, char *argv[])
   // TODO: Initialize the pid variable.
   //pid.Init(0.0, 0.0, 0.0, true);
   //pid.Init(0.5, 0.0, 3);
+  //pid.Init(0.454726, 0.00492453, 3.14923);
   pid.Init(p_gain, i_gain, d_gain);
   if (tune) pid.Tune();
-  //pid.Init(0.454726, 0.00492453, 3.14923);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.

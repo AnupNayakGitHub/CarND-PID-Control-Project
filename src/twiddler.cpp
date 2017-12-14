@@ -63,16 +63,20 @@ void Twiddler::twiddle(double err) {
       cur_state = (++cur_state)%ks.size();
     }
   }
-  cout << "Error : " << err <<" Best Error : " << best_err << endl; 
-  cout << "ks [ ";
-  for (auto a : ks)
-    cout << a << " ";
-  cout << "]" << endl;
+}
 
-  cout << "kds[ ";
-  for (auto a : kds)
-    cout << a << " ";
-  cout << "]" << endl;
+std::ostream& operator <<(std::ostream& os, const Twiddler& twdlr){
+  os << "Best Error : " << twdlr.best_err << endl;
+
+  os << "ks [ ";
+  for (auto a : twdlr.ks) os << a << " ";
+  os << "]" << endl;
+  
+  os << "kds[ ";
+  for (auto a : twdlr.kds) os << a << " ";
+  os << "]";
+
+  return os;
 }
 
 void Twiddler::insert(double k, double dk) {
