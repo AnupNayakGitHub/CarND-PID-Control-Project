@@ -25,7 +25,6 @@ private:
   double Ki;
   double Kd;
 
-  bool tune;
   Twiddler twdlr;
   TWDLR_STATES state;
 

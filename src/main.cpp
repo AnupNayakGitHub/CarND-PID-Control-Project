@@ -47,7 +47,8 @@ int main(int argc, char *argv[])
   // TODO: Initialize the pid variable.
   //pid.Init(0.0, 0.0, 0.0, true);
   //pid.Init(0.5, 0.0, 3);
-  //pid.Init(0.454726, 0.00492453, 3.14923);
+  //pid.Init(0.454726, 0.00492453, 3.14923); //GOOD Parameters!!
+  //pid.Init(1.68966, 0.0047348, 4.87035); //GOOD Parameters!!!
   pid.Init(p_gain, i_gain, d_gain);
   if (tune) pid.Tune();
 

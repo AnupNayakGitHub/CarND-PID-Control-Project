@@ -4,7 +4,7 @@
 using namespace std;
 
 PID::PID():p_error(0.0), i_error(0.0), d_error(0.0),
-           Kp(0.0), Ki(0.0), Kd(0.0), tune(false), state(TUNED) {}
+           Kp(0.0), Ki(0.0), Kd(0.0), state(TUNED) {}
 
 PID::~PID() {}
 
@@ -19,7 +19,6 @@ void PID::Tune(){
 }
 
 void PID::Tune(double tol, unsigned int steps_per_adj) {
-  this->tune = true;
   state = STABILIZE;
   twdlr.insert(Kp, 1);
   twdlr.insert(Kd, 1);
@@ -28,7 +27,7 @@ void PID::Tune(double tol, unsigned int steps_per_adj) {
 }
 
 bool PID::IsTuning() {
-  return (tune);
+  return (state != TUNED);
 }
 unsigned int PID::TwiddlerAdjustments() {
   return twdlr.iterations;
@@ -42,7 +41,7 @@ bool PID::NeedsReset() {
 }
 
 void PID::UpdateError(double cte, double speed) {
-  if (!tune) ;
+  if (state == TUNED) ;
   else if(!twdlr.isStable()) {
     twdlr.twiddle(cte);
     cout << twdlr << endl;
@@ -77,7 +76,6 @@ void PID::UpdateError(double cte, double speed) {
   }
   else if (state == I_CORRECTION) {
     state = TUNED;
-    tune = false;
   }
 
   cout << "Ks  [" << Kp << ", " << Ki <<", " << Kd << "], Tuning state : " << state << endl;
