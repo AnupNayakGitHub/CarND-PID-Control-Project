@@ -3,9 +3,7 @@
 
 using namespace std;
 
-PID::PID():p_error(0.0), i_error(0.0), d_error(0.0),
-           Kp(0.0), Ki(0.0), Kd(0.0), state(TUNED) {}
-
+PID::PID() {}
 PID::~PID() {}
 
 void PID::Init(double Kp, double Ki, double Kd) {
@@ -58,7 +56,9 @@ void PID::UpdateError(double cte, double speed) {
       Ki = ks[0];
     }
   }
+  // The PID Controller stablilized
   else if (state == STABILIZE){
+    // Prepare for next state
     twdlr.reset();
     twdlr.insert(Kp, 0.1);
     twdlr.insert(Kd, 0.1);
@@ -66,7 +66,9 @@ void PID::UpdateError(double cte, double speed) {
     twdlr.tolerance = 0.001;
     state = PD_CORRECTION;
   }
+  // Proportional and Derivative corrections are complete
   else if (state == PD_CORRECTION){
+    // Prepare for next state
     twdlr.reset();
     twdlr.insert(Ki, 0.001);
     twdlr.set_steps_per_iteration(100);
@@ -74,7 +76,9 @@ void PID::UpdateError(double cte, double speed) {
     state = I_CORRECTION;
     i_error = 0;
   }
+  // Integration correction is complete
   else if (state == I_CORRECTION) {
+    // Its tuned
     state = TUNED;
   }
 

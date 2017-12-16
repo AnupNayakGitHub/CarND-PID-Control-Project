@@ -14,19 +14,19 @@ public:
 
 private:
   // Errors
-  double p_error;
-  double i_error;
-  double d_error;
+  double p_error = 0.0;
+  double i_error = 0.0;
+  double d_error = 0.0;
 
   double speed;
 
   // Coefficients
-  double Kp;
-  double Ki;
-  double Kd;
+  double Kp = 0.0;
+  double Ki = 0.0;
+  double Kd = 0.0;
 
   Twiddler twdlr;
-  TWDLR_STATES state;
+  TWDLR_STATES state = TUNED;
 
   // Internal method to set the tuning parameters
   void Tune(double tol, unsigned int steps_per_adj);

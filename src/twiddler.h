@@ -19,9 +19,8 @@ public:
 
   unsigned int iterations;
   double tolerance;
-  /*
-  * Constructor
-  */
+
+  // Constructor
   Twiddler();
 
   /*

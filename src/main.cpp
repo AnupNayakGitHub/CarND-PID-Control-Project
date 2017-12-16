@@ -49,6 +49,10 @@ int main(int argc, char *argv[])
   //pid.Init(0.5, 0.0, 3);
   //pid.Init(0.454726, 0.00492453, 3.14923); //GOOD Parameters!!
   //pid.Init(1.68966, 0.0047348, 4.87035); //GOOD Parameters!!!
+
+
+  // The command line argumensts are used either as final
+  // gains or initial values for tuning
   pid.Init(p_gain, i_gain, d_gain);
   if (tune) pid.Tune();
 
@@ -81,31 +85,49 @@ int main(int argc, char *argv[])
           if (steer_value > 1) steer_value = 1;
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
+
+          // Once tuning is complete the messages are sent as is without manipulation
           if (!pid.IsTuning()){
             json msgJson;
             msgJson["steering_angle"] = steer_value;
+            // When the angle is pretty much staright accelerate
+            // Otherwise don't accelerate much.
             msgJson["throttle"] = (fabs(angle) < 7.5)?0.3:0.1;
             auto msg = "42[\"steer\"," + msgJson.dump() + "]";
             std::cout << msg << std::endl;
             ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
           }
+          // The PID Controller is still tuning and the vehicle may go
+          // off track. Need to reset the simulator after few cycles
+          // of hyper parameter adjustments.
+          // The simulater resets every 10 adjustments. Hence, the reset
+          // message is not sent until 10 adjustments.
           else if ( pid.NeedsReset() && (pid.TwiddlerAdjustments() < 10)){
             json msgJson;
             msgJson["steering_angle"] = steer_value;
+            // Drive very slow to keep the vehicle at a constant
+            // speed and adjust the gains such that the vehicle
+            // will be on track. 
             msgJson["throttle"] = (speed > 2)? 0.0 : 0.1;
             auto msg = "42[\"steer\"," + msgJson.dump() + "]";
             std::cout << msg << std::endl;
             ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
           }
+          // After 10 adjustments, the simulator resets
           else if (pid.NeedsReset()) {
             std::string  msg = "42[\"reset\",{}]";
             std::cout << msg << std::endl;
             ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
             pid.ResetTwiddlerAdjustments();
           }
+          // The PID controller is still tuning but controlled enoguh
+          // to keep the vehicle on track.
           else {
             json msgJson;
             msgJson["steering_angle"] = steer_value;
+            // Drive at a reasonable speed but try to keep
+            // keep constant speed. Tune the parametrs as
+            // much as possibe.
             msgJson["throttle"] = (speed > 5)? 0.0 : 0.1;
             auto msg = "42[\"steer\"," + msgJson.dump() + "]";
             std::cout << msg << std::endl;
